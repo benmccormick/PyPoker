@@ -1,7 +1,7 @@
 import cardconstants
 
 
-class HandFunctions():
+class HandFunctions:
 
     constants = cardconstants.Constants()
 
@@ -29,8 +29,9 @@ class HandFunctions():
             return -1
         else:
             for index in range(1, len(hand1)):
-                if(hand1[index] != hand2[index]):
-                    return (1 if (hand1[index] > hand2[index]) else -1)
+                if(self.numVal(hand1[index]) != self.numVal(hand2[index])):
+                    return (1 if (self.numVal(hand1[index]) >
+                                  self.numVal(hand2[index])) else -1)
             return 0
 
     #Given the cards that make up the core of the hand,
@@ -76,7 +77,11 @@ class HandFunctions():
         for card in cards:
             if card[0] != suit:
                 cards.remove(card)
-        return [self.constants.sflush] + self.isStraight(cards)[1:]
+        isStraight = self.isStraight(cards)
+        if isStraight:
+            return [self.constants.sflush] + isStraight[1:]
+        else:
+            return False
 
     def isStraight(self, cards):
         cards = sorted(cards, key=self.numVal, reverse=True)
@@ -107,7 +112,7 @@ class HandFunctions():
             if values[index] == 4:
                 for suit in self.constants.suits:
                     hand.append(suit + str(index))
-                    hand = [self.constants.four] + hand
+                hand = [self.constants.four] + hand
                 hand = self.fillInHand(hand, cards)
                 return hand
             elif values[index] == 3:
